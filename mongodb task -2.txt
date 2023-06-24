@@ -1,0 +1,89 @@
+1.  Find all the topics and tasks which are thought in the month of October
+Modeling Topics:
+
+db.topic.find({ topic: { $gt: new ISODate(‘sept 2023T11:59:59’), $lte: new ISODate(oct 2023T11:59:59’) } })
+
+Id: Int
+topicName: String
+topicContent: String
+topicPreread: String
+topicDate: Timestamp
+topicActivity: String
+topicTags: Array
+topicTimelineId: Int
+topicType: String { Regular / Additional }
+topicTaskId: int
+
+
+2. Find all the company drives which appeared between 15 oct-2020 and 31-oct-2020
+db.topic.find({ topic: { $gt: new ISODate(‘oct 2023-14-11:59:59’), $lte: new ISODate(oct 2023-31-11:59:59’) }, progress: 'appeared' })
+
+Modelling Company Drives:
+
+Id: Int
+companyName: String
+companyDetails: String
+companyWebsite: String
+skillsNeeded: Array
+driveDate: Date
+driveMode: String
+
+3.  Find all the company drives and students who are appeared for the placement.
+
+Modeling Attendence:
+
+Id: int
+batchId: int
+userId: int
+isPresent: boolean
+taskId: int (Lookup from TaskSubmission Table)
+Date: new IsoDate
+
+
+4.  Find the number of problems solved by the user in codekata
+db.batches.find({ mentorId: ObjectId(""), batchStrength: { $gt: 15, $lt: 100 } })
+Modeling Codekata:
+
+Id: int
+problemId: int
+userId: int
+createdOn: Timestamp
+updatedOn: Timestamp
+progress: String
+earnedPoints: int
+
+
+
+5. Find all the mentors with who has the mentee's count more than 15
+USING NORMAL FIND:
+
+db.batchinfo.find({ batchStrength: { $gt: 15 } })
+
+USING AGGREGATION TO FILTER AND LOOKUP:
+
+db.batchInfo.aggregate([{$match:{batchStrength:{$gt:15}}},
+{ $lookup: {
+      from: "mentorInfo",
+      localField: "mentorId",
+      foreignField: "id",
+      as: "mentor_details",
+    }},
+{$project:{mentor_details:{id:1,mentorName:1},batchStrength:1}}
+])
+
+
+6.  Find the number of users who are absent and task is not submitted  between 15 oct-2020 and 31-oct-2020
+db.topic.find({ topic: { $gt: new ISODate(‘oct 2023-14-11:59:59’), $lte: new ISODate(oct 2023-31-11:59:59’) }, progress: 'not submitted' })
+
+Modeling Attendence:
+
+Id: int
+batchId: int
+userId: int
+isPresent: boolean
+taskId: int (Lookup from TaskSubmission Table)
+Date: new IsoDate
+
+
+
+
